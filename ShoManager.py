@@ -29,10 +29,12 @@ def logData(path, showname, final_list):
         ShoManager.info('No Changes')
     ShoManager.info('\n')
 
+
 def rename(path, showname='None'):
     # os.chdir(path)
-    pattern = re.compile(r'(ep\s?|e\s?|Episode\s?|^|{}\s?)(\d+)'.format(showname), re.IGNORECASE)
-    ext_pattern = re.compile(r'\.(mp4|mkv|srt)$',re.IGNORECASE)
+    pattern = re.compile(
+        r'(ep\s?|e\s?|Episode\s?|^|{}\s?)(\d+)'.format(showname), re.IGNORECASE)
+    ext_pattern = re.compile(r'\.(mp4|mkv|srt)$', re.IGNORECASE)
 
     file_list = os.listdir(path)
     final_list = []
@@ -50,14 +52,13 @@ def rename(path, showname='None'):
             file_ext = ext_match.group(0)
 
         if file_ext != 'null':
-            new_file_name = showname + ' ' + 'Episode ' + ep_no.zfill(2) + file_ext
+            new_file_name = showname + ' ' + \
+                'Episode ' + ep_no.zfill(2) + file_ext
             temp = [file, new_file_name]
             final_list.append(temp)
 
     for item in final_list:
         print('Old Name :', item[0], '\nNew Name :', item[1], end='\n\n')
-
-
 
     choice = input('\nDo You Want To Proceed ?(y/n) : ')
     if choice == 'y' or choice == 'Y':
@@ -67,9 +68,6 @@ def rename(path, showname='None'):
         for item in final_list:
             os.rename(item[0], item[1])
         os.chdir(cwd)
-
-
-
 
 
 # r""" def undo_task(task_time):
@@ -126,13 +124,28 @@ def undo():
     cwd = os.getcwd()
     os.chdir(path)
     for item in final_list:
-        os.rename(item[0],item[1])
+        os.rename(item[0], item[1])
     os.chdir(cwd)
 
 
+print('Choose an option :')
+print('1. Reformat a Series\n2. Undo Last Operation')
 
-path = input('Enter Path : ')
-name = input('Enter Name : ')
-# rename('F:\TV Shows\Descendants of the Sun (2016)', 'Descendants of the Sun')
-rename(path, name)
-# undo()
+flag = 1
+while(True):
+    try:
+        inputChoice = input('Choose 1 or 2 : ')
+        if(inputChoice == '1'):
+            path = input('Enter Path : ')
+            name = input('Enter Name : ')
+            # rename('F:\TV Shows\Descendants of the Sun (2016)', 'Descendants of the Sun')
+            rename(path, name)
+            break
+        elif inputChoice == '2':
+            undo()
+            break
+        else:
+            print('Incorrect Choice, Please Try Again..')
+    except FileNotFoundError:
+        print('File Path not Found... :( ')
+        break
